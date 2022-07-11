@@ -15,7 +15,8 @@
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
-    <application>
+    <application
+        android:requestLegacyExternalStorage="true">
         <service android:name="SplitAPKInstallService"
             android:exported="false" />
     </application>

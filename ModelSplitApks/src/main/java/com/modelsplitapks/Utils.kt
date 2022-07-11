@@ -21,7 +21,6 @@ fun unzip(zip: String, path: String) {
     try {
         ZipFile(zip).extractAll(path)
     } catch (ignored: ZipException) {
-        ignored
     }
 }
 

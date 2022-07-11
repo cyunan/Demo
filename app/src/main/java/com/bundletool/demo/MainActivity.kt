@@ -26,8 +26,9 @@ class MainActivity : AppCompatActivity() {
         requestPermission()
         val btButton = findViewById<Button>(R.id.bt_split);
         btButton.setOnClickListener{
-            handleAppBundle("/storage/emulated/0/aab/my_app.apks",
+            handleAppBundle("/storage/emulated/0/aab/test.apks",
                 this,
+                connectDevice = false,
                 preCallBack = {
                     Log.e("handleAppBundle","preCallBack")
                 },

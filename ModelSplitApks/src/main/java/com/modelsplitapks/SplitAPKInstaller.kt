@@ -64,14 +64,15 @@ private fun handlerPrepareInstall(
     object : sExecutor(){
         override fun onPreExecute() {
             //过滤数据
-            if (!connectDevice) return
             Common.getAppList().addAll(
                 FilePicker.getData(activity).apply {
-                    this.filterNot {
-                        it.isContains(basePrefix + baseMaster) && !it.isContains(getApiSuffixFilter())
-                                || (it.isContains(basePrefix + baseARM) && !it.isContains(getCPUSuffixFilter()))
-                                || (it.isContains(basePrefix + baseARM) && !it.isContains(getApiSuffixFilter()))
-                                || it.isBlank()
+                    if (connectDevice){
+                        this.filterNot {
+                            it.isContains(basePrefix + baseMaster) && !it.isContains(getApiSuffixFilter())
+                                    || (it.isContains(basePrefix + baseARM) && !it.isContains(getCPUSuffixFilter()))
+                                    || (it.isContains(basePrefix + baseARM) && !it.isContains(getApiSuffixFilter()))
+                                    || it.isBlank()
+                        }
                     }
                 }
             )
