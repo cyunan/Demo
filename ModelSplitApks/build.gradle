@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
-
 android {
     compileSdk 32
 
@@ -27,6 +27,8 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    //忽略在打包过程的警告
+    lintOptions { abortOnError false }
 }
 
 dependencies {
@@ -40,6 +42,23 @@ dependencies {
     implementation 'net.lingala.zip4j:zip4j:2.9.0'
     //splitApks核心库
     implementation 'com.github.sunilpaulmathew:sCommon:f741dad24342cc0a7fea4f9f43475385d5259d1b'
-    //权限申请库
-    implementation 'com.guolindev.permissionx:permissionx:1.6.4'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.splitapks'
+            artifactId = 'modify'
+            version = '1.0.0'
+            artifact "$buildDir/outputs/aar/${project.getName()}-debug.aar"
+//            from(components["java"])
+
+        }
+    }
+    repositories {
+        maven {
+            // change to point to your repo, e.g. http://my.org/repo
+            url = 'file://D://myaar/repository/'
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package com.modelsplitapks
 
 import android.app.Application
-import com.permissionx.guolindev.PermissionX
 
 /**
  *    author : ChenYuNan

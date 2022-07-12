@@ -18,10 +18,7 @@ fun delete(file: File): Boolean {
     return file.delete()
 }
 fun unzip(zip: String, path: String) {
-    try {
-        ZipFile(zip).extractAll(path)
-    } catch (ignored: ZipException) {
-    }
+    ZipFile(zip).extractAll(path)
 }
 
 fun zip(zip: String?, files: List<File?>?) {

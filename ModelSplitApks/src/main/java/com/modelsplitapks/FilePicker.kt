@@ -11,13 +11,11 @@ import java.util.*
 
 object FilePicker {
 
-    fun getData(activity: Activity): List<String> {
-        val apkList = getApk(Common.getPath())
-        // TODO: apkList为空怎么处理
-        return getApk(Common.getPath())
+    fun getData(): List<String> {
+        return getApk(Common.mPath)
     }
     private fun getApk(path: String): MutableList<String> {
-        val mDir: MutableList<String> = ArrayList()
+        val mDir = mutableListOf<String>()
         val file = File(path)
         val tempList = file.listFiles() ?: return mDir
         for(tempFile in tempList){

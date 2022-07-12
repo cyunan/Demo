@@ -1,49 +1,80 @@
 package com.bundletool.demo
 
 import android.Manifest
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import android.view.View
 import android.widget.Button
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.modelsplitapks.handleAppBundle
-import java.io.File
+import com.modelsplitapks.SplitAPKInstaller.handleAppBundle
+import com.xiasuhuei321.loadingdialog.view.LoadingDialog
 
 class MainActivity : AppCompatActivity() {
+    lateinit var dialog: LoadingDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         requestPermission()
-        val btButton = findViewById<Button>(R.id.bt_split);
+        val btButton = findViewById<Button>(R.id.bt_split)
+        dialog = LoadingDialog(this)
+
         btButton.setOnClickListener{
             handleAppBundle("/storage/emulated/0/aab/test.apks",
                 this,
                 connectDevice = false,
                 preCallBack = {
+                    dialog.setLoadingText("加载中")
+                        .setSuccessText("加载成功")
+                        .setFailedText("加载失败")
+                        .show()
                     Log.e("handleAppBundle","preCallBack")
                 },
                 inCallBack = {
                     Log.e("handleAppBundle","inCallBack")
                 },
-                postCallBack = {
-                    Log.e("handleAppBundle","postCallBack")
+                successCallback = {
+                    runOnUiThread { dialog.loadSuccess() }
+                },
+                errorCallback = {
+                    val msq = it
+                    runOnUiThread { dialog.loadFailed() }
                 }
             )
         }
 
         val btCheck = findViewById<Button>(R.id.bt_check)
         btCheck.setOnClickListener{
-            handleAppBundle("/storage/emulated/0/aab/my_app.apks", this)
+            dialog.setLoadingText("加载中")
+                .setSuccessText("加载成功")
+                .setFailedText("加载失败")
+                .show()
+            handleAppBundle("/storage/emulated/0/aab/my_app.apks",
+                this,
+                connectDevice = true,
+                preCallBack = {
+
+                },
+                inCallBack = {
+                    Log.e("handleAppBundle","inCallBack")
+                },
+                successCallback = {
+                    runOnUiThread { dialog.loadSuccess() }
+                },
+                errorCallback = {
+                    val msq = it
+                    runOnUiThread { dialog.loadFailed() }
+                }
+            )
         }
 
 
@@ -91,4 +122,13 @@ class MainActivity : AppCompatActivity() {
     companion object{
         private const val REQUEST_EXTERNAL_STORAGE = 1
     }
+
+    /**
+     * 1. 找到aab下载位置
+     * 2. 根据对应的数据包类型进行安装
+     * 3. 完善安装过程的回调
+     */
+
+
+
 }

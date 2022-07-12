@@ -27,7 +27,7 @@
         android:layout_height="wrap_content">
         <Button
             android:id="@+id/bt_check"
-            android:text="split test.aab"
+            android:text="split connected-device"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
