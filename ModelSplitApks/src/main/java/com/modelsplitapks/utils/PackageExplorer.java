@@ -36,9 +36,7 @@ import in.sunilpaulmathew.sCommon.Utils.sExecutor;
 import in.sunilpaulmathew.sCommon.Utils.sPermissionUtils;
 import in.sunilpaulmathew.sCommon.Utils.sUtils;
 
-/*
- * Created by sunilpaulmathew <sunil.kde@gmail.com> on February 09, 2020
- */
+
 public class PackageExplorer {
 
     public static boolean isTextFile(String path) {

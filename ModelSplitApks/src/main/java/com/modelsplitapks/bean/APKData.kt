@@ -2,6 +2,8 @@ package com.modelsplitapks.bean
 
 import `in`.sunilpaulmathew.sCommon.Utils.sAPKUtils
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.modelsplitapks.utils.PackageExplorer
 import net.dongliu.apk.parser.ApkFile
 import net.dongliu.apk.parser.bean.ApkMeta
@@ -15,7 +17,7 @@ import java.io.IOException
  */
 object APKData {
     var mAPK: File? = null
-    var mPermissions = mutableListOf<String>()
+    var mPermissions: List<String>? = null
     var mCertificate: String? = null
     var mManifest = ""
     var mMinSDKVersion = ""
@@ -23,6 +25,7 @@ object APKData {
     var mSize = ""
     var mVersion = ""
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun getAPKData(apk: String, context: Context): APKItems? {
         try {
             ApkFile(File(apk)).use { apkFile ->
