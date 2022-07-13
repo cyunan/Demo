@@ -7,7 +7,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        minSdk 23
+        minSdk 19
         targetSdk 32
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -50,7 +50,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.splitapks'
             artifactId = 'modify'
-            version = '1.0.0'
+            version = '1.0.3'
             artifact "$buildDir/outputs/aar/${project.getName()}-debug.aar"
 //            from(components["java"])
 

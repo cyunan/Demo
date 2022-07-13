@@ -12,5 +12,4 @@ interface OnCallback{
     fun inInstall()
     fun successInstall()
     fun errorInstall(error: String)
-
 }

@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.modelsplitapks.dao.SplitAPKInstaller.handleAppBundle
-import com.modelsplitapks.dao.SplitAPKInstaller1
 import com.xiasuhuei321.loadingdialog.view.LoadingDialog
 
 class MainActivity : AppCompatActivity() {
@@ -27,27 +26,25 @@ class MainActivity : AppCompatActivity() {
         dialog = LoadingDialog(this)
 
         btButton.setOnClickListener{
+            dialog.setLoadingText("加载中")
+                .setSuccessText("加载成功")
+                .setFailedText("加载失败")
+                .show()
             handleAppBundle("/storage/emulated/0/aab/my_app.apks",
                 this,
-                connectDevice = false,
-                preCallBack = {
-                    dialog.setLoadingText("加载中")
-                        .setSuccessText("加载成功")
-                        .setFailedText("加载失败")
-                        .show()
-                    Log.e("handleAppBundle","preCallBack")
-                },
-                inCallBack = {
+                connectDevice = false){
+                preInstall {
+                }
+                inInstall {
                     Log.e("handleAppBundle","inCallBack")
-                },
-                successCallback = {
+                }
+                successInstall {
                     runOnUiThread { dialog.loadSuccess() }
-                },
-                errorCallback = {
-                    val msq = it
+                }
+                errorInstall {
                     runOnUiThread { dialog.loadFailed() }
                 }
-            )
+            }
         }
 
         val btCheck = findViewById<Button>(R.id.bt_check)
@@ -58,29 +55,21 @@ class MainActivity : AppCompatActivity() {
                 .show()
             handleAppBundle("/storage/emulated/0/aab/my_app.apks",
                 this,
-                connectDevice = true,
-                preCallBack = {
+                connectDevice = true){
+                preInstall {
 
-                },
-                inCallBack = {
+                }
+                inInstall {
                     Log.e("handleAppBundle","inCallBack")
-                },
-                successCallback = {
+                }
+                successInstall {
                     runOnUiThread { dialog.loadSuccess() }
-                },
-                errorCallback = {
-                    val msq = it
+                }
+                errorInstall {
                     runOnUiThread { dialog.loadFailed() }
                 }
-            )
+            }
         }
-
-        SplitAPKInstaller1.handleAppBundle(
-            "/storage/emulated/0/aab/my_app.apks",
-            this,
-            connectDevice = true,
-            callback = onCallback
-        )
 
 
     }

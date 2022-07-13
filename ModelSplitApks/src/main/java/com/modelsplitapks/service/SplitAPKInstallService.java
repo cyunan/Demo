@@ -11,7 +11,10 @@ package com.modelsplitapks.service;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageInstaller;
+import android.os.Build;
 import android.os.IBinder;
+
+import androidx.annotation.RequiresApi;
 
 import in.sunilpaulmathew.sCommon.Utils.sInstallerUtils;
 
@@ -22,6 +25,7 @@ import in.sunilpaulmathew.sCommon.Utils.sInstallerUtils;
  */
 public class SplitAPKInstallService extends Service {
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         sInstallerUtils.setStatus(intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -999), intent, this);

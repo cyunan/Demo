@@ -8,5 +8,8 @@ import com.modelsplitapks.base.OnCallbackImpl
  *    desc   :
  */
 val onCallback = fun OnCallbackImpl.() {
+    preInstall {
+
+    }
 
 }
