@@ -1,4 +1,4 @@
-package com.modelsplitapks
+package com.modelsplitapks.dao
 
 import `in`.sunilpaulmathew.sCommon.Utils.*
 import android.annotation.SuppressLint
@@ -6,6 +6,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.modelsplitapks.bean.APKData
+import com.modelsplitapks.bean.Common
+import com.modelsplitapks.bean.DeviceData
+import com.modelsplitapks.service.SplitAPKInstallService
+import com.modelsplitapks.unzip
 import net.lingala.zip4j.exception.ZipException
 import java.io.File
 import java.util.*
@@ -63,26 +68,18 @@ object SplitAPKInstaller {
         object : sExecutor(){
             override fun onPreExecute() {
                 //过滤数据
-
                 FilePicker.getData().filterNot {
-                    it.isContains(basePrefix + baseMaster) && !it.isContains(getApiSuffixFilter())
-                            || (it.isContains(basePrefix + baseARM) && !it.isContains(getCPUSuffixFilter()))
-                            || (it.isContains(basePrefix + baseARM) && !it.isContains(getApiSuffixFilter()))
-                            || it.isBlank()
+                    connectDevice &&(it.isContains(basePrefix + baseMaster) && !it.isContains(
+                        getApiSuffixFilter()
+                    )
+                            || (it.isContains(basePrefix + baseARM) && !it.isContains(
+                        getCPUSuffixFilter()
+                    ))
+                            || (it.isContains(basePrefix + baseARM) && !it.isContains(
+                        getApiSuffixFilter()
+                    ))
+                            || it.isBlank())
                 }.apply { Common.mAPKList.addAll(this) }
-
-//                Common.mAPKList.addAll(FilePicker.getData())
-//                Common.mAPKList.addAll(
-//                    FilePicker.getData().apply {
-//                        if (connectDevice){
-//                            this.filterNot {
-//                                it.isContains(basePrefix + baseMaster) && !it.isContains(getApiSuffixFilter())
-//                                        || (it.isContains(basePrefix + baseARM) && !it.isContains(getCPUSuffixFilter()))
-//                                        || (it.isContains(basePrefix + baseARM) && !it.isContains(getApiSuffixFilter()))
-//                                        || it.isBlank() }
-//                        }
-//                    }
-//                )
 
             }
 
@@ -90,21 +87,28 @@ object SplitAPKInstaller {
                 for (mAPKs in Common.mAPKList) {
                     sAPKUtils.getPackageName(mAPKs, activity)?.let {
                         Common.mApplicationID = Objects.requireNonNull(
-                            sAPKUtils.getPackageName(
-                                mAPKs,
-                                activity
-                            )
+                            sAPKUtils.getPackageName(mAPKs, activity)
                         )
                     }
                 }
             }
 
             override fun onPostExecute() {
-                Common.mUpdating = sPackageUtils.isPackageInstalled(
-                    Common.mApplicationID,
-                    activity
-                )
-                installSplitAPKs(activity, preCallBack, inCallBack, successCallback, errorCallback)
+                if(Common.mAPKList.size == 1){//apk集只有一个apk
+//                    APKData.mAPK = File(Common.mAPKList[0])
+//                    if (APKData.mAPK != null) {
+//                        manageInstallation(null, activity).execute()
+//                    } else if (activity.getIntent().getData() != null) {
+//                        manageInstallation(getIntent().getData(), this).execute()
+//                    }
+
+                }else{//apk集有多个apk
+                    Common.mUpdating = sPackageUtils.isPackageInstalled(
+                        Common.mApplicationID,
+                        activity
+                    )
+                    installSplitAPKs(activity, preCallBack, inCallBack, successCallback, errorCallback)
+                }
             }
 
         }.execute()
@@ -122,9 +126,9 @@ object SplitAPKInstaller {
             override fun onPreExecute() {
                 // TODO: 需要回调什么信息
                 checkPermission(activity)
+                sUtils.saveString("installationStatus", "waiting", activity)
                 preCallBack?.let { preCallBack() }
 //            val installIntent = Intent(activity, InstallerActivity::class.java)
-//            sUtils.saveString("installationStatus", "waiting", activity)
 //            activity.startActivity(installIntent)
             }
 
@@ -192,7 +196,7 @@ object SplitAPKInstaller {
 
     private fun String.isContains(str: String) = this.contains(str)
     private fun getApiSuffixFilter() =
-        DeviceInformation.mApiVersion.run {
+        DeviceData.mApiVersion.run {
             if (this < Build.VERSION_CODES.LOLLIPOP){
                 // TODO: 21以下待定
                 ""
@@ -203,7 +207,7 @@ object SplitAPKInstaller {
                 "_2$baseSuffix"
             }
         }
-    private fun getCPUSuffixFilter() = if (DeviceInformation.mIsX86) baseV7 else baseV8
+    private fun getCPUSuffixFilter() = if (DeviceData.mIsX86) baseV7 else baseV8
 
 
 

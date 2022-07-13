@@ -1,16 +1,15 @@
-package com.modelsplitapks
+package com.modelsplitapks.bean
 
 import android.os.Build
 import android.util.Log
 import java.lang.reflect.Method
-import kotlin.math.log
 
 /**
  *    author : ChenYuNan
  *    date   : 2022/7/8
  *    desc   :
  */
-object DeviceInformation {
+object DeviceData {
     val mApiVersion: Int = getApiVersion()
     val mIsX86: Boolean = checkIfCPUx86()
 

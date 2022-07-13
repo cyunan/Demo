@@ -1,4 +1,4 @@
-package com.modelsplitapks
+package com.modelsplitapks.dao
 
 import `in`.sunilpaulmathew.sCommon.Utils.sPermissionUtils
 import android.Manifest

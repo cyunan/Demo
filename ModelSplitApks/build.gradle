@@ -42,6 +42,7 @@ dependencies {
     implementation 'net.lingala.zip4j:zip4j:2.9.0'
     //splitApks核心库
     implementation 'com.github.sunilpaulmathew:sCommon:f741dad24342cc0a7fea4f9f43475385d5259d1b'
+    implementation 'net.dongliu:apk-parser:2.6.10'
 }
 
 publishing {

@@ -16,8 +16,9 @@
         tools:ignore="ScopedStorage" />
 
     <application
-        android:requestLegacyExternalStorage="true">
-        <service android:name="SplitAPKInstallService"
+        android:requestLegacyExternalStorage="true"
+        >
+        <service android:name=".service.SplitAPKInstallService"
             android:exported="false" />
     </application>
 

@@ -1,4 +1,4 @@
-package com.modelsplitapks
+package com.modelsplitapks.bean
 
 /**
  *    author : ChenYuNan

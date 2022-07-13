@@ -6,7 +6,7 @@
  *
  */
 
-package com.modelsplitapks;
+package com.modelsplitapks.service;
 
 import android.app.Service;
 import android.content.Intent;

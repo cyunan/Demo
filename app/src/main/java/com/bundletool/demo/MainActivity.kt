@@ -1,8 +1,6 @@
 package com.bundletool.demo
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -11,12 +9,12 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.modelsplitapks.SplitAPKInstaller.handleAppBundle
+import com.modelsplitapks.dao.SplitAPKInstaller.handleAppBundle
+import com.modelsplitapks.dao.SplitAPKInstaller1
 import com.xiasuhuei321.loadingdialog.view.LoadingDialog
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         dialog = LoadingDialog(this)
 
         btButton.setOnClickListener{
-            handleAppBundle("/storage/emulated/0/aab/test.apks",
+            handleAppBundle("/storage/emulated/0/aab/my_app.apks",
                 this,
                 connectDevice = false,
                 preCallBack = {
@@ -76,6 +74,13 @@ class MainActivity : AppCompatActivity() {
                 }
             )
         }
+
+        SplitAPKInstaller1.handleAppBundle(
+            "/storage/emulated/0/aab/my_app.apks",
+            this,
+            connectDevice = true,
+            callback = onCallback
+        )
 
 
     }
