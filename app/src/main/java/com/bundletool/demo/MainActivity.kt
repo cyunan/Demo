@@ -26,9 +26,10 @@ class MainActivity : AppCompatActivity() {
         dialog = LoadingDialog(this)
 
         btButton.setOnClickListener{
-            dialog.setLoadingText("加载中")
-                .setSuccessText("加载成功")
-                .setFailedText("加载失败")
+            dialog.setLoadingText("安装中")
+                .setSuccessText("安装成功")
+                .setFailedText("安装失败")
+                .setLoadSpeed(LoadingDialog.Speed.SPEED_TWO)
                 .show()
             handleAppBundle("/storage/emulated/0/aab/my_app.apks",
                 this,
@@ -49,9 +50,10 @@ class MainActivity : AppCompatActivity() {
 
         val btCheck = findViewById<Button>(R.id.bt_check)
         btCheck.setOnClickListener{
-            dialog.setLoadingText("加载中")
-                .setSuccessText("加载成功")
-                .setFailedText("加载失败")
+            dialog.setLoadingText("安装中")
+                .setSuccessText("安装成功")
+                .setFailedText("安装失败")
+                .setLoadSpeed(LoadingDialog.Speed.SPEED_TWO)
                 .show()
             handleAppBundle("/storage/emulated/0/aab/my_app.apks",
                 this,

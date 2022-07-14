@@ -21,7 +21,6 @@ import java.util.*
  *    desc   : APKS操作类
  */
 
-typealias Callback = ()-> Unit
 object SplitAPKInstaller {
 
     //解压apks
