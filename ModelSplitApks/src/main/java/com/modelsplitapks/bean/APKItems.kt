@@ -10,11 +10,11 @@ import android.graphics.drawable.Drawable
 data class APKItems(
     val mIcon: Drawable,
     val mPermissions: List<String>,
-    val mVersionCode: Long,
-    val mManifest: String,
+    val mVersionCode: Long?,
+    val mManifest: String?,
     val mAPPName: String?,
-    val mPackageName: String,
-    val mVersionName: String,
+    val mPackageName: String?,
+    val mVersionName: String?,
     val mSDKVersion: String?,
-    val mMinSDKVersion: String
+    val mMinSDKVersion: String?
 )

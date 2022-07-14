@@ -1,6 +1,6 @@
 package com.bundletool.demo
 
-import com.modelsplitapks.base.OnCallbackImpl
+import com.modelsplitapks.callback.OnCallbackImpl
 
 /**
  *    author : ChenYuNan

@@ -2,13 +2,11 @@ package com.modelsplitapks.dao
 
 import `in`.sunilpaulmathew.sCommon.Utils.*
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.modelsplitapks.base.OnCallbackImpl
-import com.modelsplitapks.bean.APKData
+import com.modelsplitapks.callback.OnCallbackImpl
 import com.modelsplitapks.bean.Common
 import com.modelsplitapks.bean.DeviceData
 import com.modelsplitapks.service.SplitAPKInstallService
