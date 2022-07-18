@@ -11,7 +11,6 @@ class OnCallbackImpl(
     private var successInstall: (() -> Unit)? = null,
     private var errorInstall: ((String) -> Unit)? = null,
     ): OnCallback{
-
     fun preInstall(listener: ()->Unit){
         this.preInstall = listener
     }

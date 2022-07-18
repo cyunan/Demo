@@ -5,7 +5,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import com.modelsplitapks.bean.APKData
 import com.modelsplitapks.callback.OnCallbackImpl
 import com.modelsplitapks.bean.Common
 import com.modelsplitapks.bean.DeviceData
@@ -21,7 +23,6 @@ import java.util.*
  *    desc   : APKS操作类
  */
 
-typealias Callback = ()-> Unit
 object SplitAPKInstaller {
 
     //解压apks
@@ -35,7 +36,6 @@ object SplitAPKInstaller {
         mCallback.callback()
         object : sExecutor(){
             override fun onPreExecute() {
-//                checkPermission(activity)
                 sUtils.delete(File(context.cacheDir.path, ""))
             }
 
@@ -63,6 +63,7 @@ object SplitAPKInstaller {
     ) {
         object : sExecutor(){
             override fun onPreExecute() {
+                Log.d("splitAPKs",  "unzip success, data:${FilePicker.getData().toString()}")
                 //过滤数据
                 FilePicker.getData().filterNot {
                     connectDevice &&(it.isContains(basePrefix + baseMaster) && !it.isContains(
@@ -76,7 +77,7 @@ object SplitAPKInstaller {
                     ))
                             || it.isBlank())
                 }.apply { Common.mAPKList.addAll(this) }
-
+                Log.d("splitAPKs",  "After data filtering, data:${FilePicker.getData().toString()}")
             }
 
             override fun doInBackground() {
@@ -95,21 +96,23 @@ object SplitAPKInstaller {
             }
 
             override fun onPostExecute() {
-                if(Common.mAPKList.size == 1){//apk集只有一个apk
+//                if(Common.mAPKList.size == 1){//apk集只有一个apk
 //                    APKData.mAPK = File(Common.mAPKList[0])
-//                    if (APKData.mAPK != null) {
-//                        manageInstallation(null, activity).execute()
-//                    } else if (activity.getIntent().getData() != null) {
-//                        manageInstallation(getIntent().getData(), this).execute()
-//                    }
+//                    APKData.mAPK?.let { manageInstallation(null, context, callback) }
+//
+//                }else{//apk集有多个apk
+//                    Common.mUpdating = sPackageUtils.isPackageInstalled(
+//                        Common.mApplicationID,
+//                        context
+//                    )
+//                    installSplitAPKs(context, callback)
+//                }
 
-                }else{//apk集有多个apk
-                    Common.mUpdating = sPackageUtils.isPackageInstalled(
-                        Common.mApplicationID,
-                        context
-                    )
-                    installSplitAPKs(context, callback)
-                }
+                Common.mUpdating = sPackageUtils.isPackageInstalled(
+                    Common.mApplicationID,
+                    context
+                )
+                installSplitAPKs(context, callback)
             }
 
         }.execute()
@@ -123,12 +126,9 @@ object SplitAPKInstaller {
         object : sExecutor(){
             override fun onPreExecute() {
                 // TODO: 需要回调什么信息
-//                checkPermission(context)
-                sUtils.saveString("installationStatus", "waiting", context)
+                sUtils.saveString(InstallationStatus, Waiting, context)
                 callback.preInstall()
-//                preCallBack?.let { preCallBack() }
-//            val installIntent = Intent(activity, InstallerActivity::class.java)
-//            activity.startActivity(installIntent)
+
             }
 
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -152,17 +152,21 @@ object SplitAPKInstaller {
                                 mFile.name,
                                 mFile.toString(),
                                 context
-                            ) }
+                            )
+                            Log.d("splitAPKs","RunInstallWrite,Currently processing file is ${mFile.name}")
+                        }
                     }
+
                 } catch (ignored: NullPointerException) {
                     callback.errorInstall(ignored.toString())
-//                    errorCallback?.let { errorCallback(ignored.toString()) }
                 }
                 sInstallerUtils.doCommitSession(
                     sessionId,
                     getInstallerCallbackIntent(context),
                     context
                 )
+                Log.d("splitAPKs","doCommitSession sessionId is $sessionId")
+
             }
             override fun onPostExecute() {
                 refreshStatus(context, callback)
@@ -213,7 +217,7 @@ object SplitAPKInstaller {
 
 
 
-    fun refreshStatus(
+    private fun refreshStatus(
         context: Context,
         callback: OnCallbackImpl
     ) {
@@ -224,14 +228,17 @@ object SplitAPKInstaller {
                     while (!isInterrupted) {
                         sleep(500)
                         val installationStatus: String =
-                            sUtils.getString("installationStatus", "waiting", context)
-                        if (installationStatus == "waiting") continue
-                        if (installationStatus == context.getString(`in`.sunilpaulmathew.sCommon.R.string.installation_status_success)){
-                            callback.successInstall()
-//                            successCallback?.let { successCallback() }
-                        }else{
-                            callback.errorInstall(installationStatus)
-//                            errorCallback?.let { errorCallback(installationStatus) }
+                            sUtils.getString(InstallationStatus, Waiting, context)
+                        when(installationStatus){
+                            Waiting-> continue
+                            context.getString()-> {callback.successInstall()
+                            Log.d("splitAPKs","Installation Completed Successfully")
+                            break
+                            }
+                            else -> {
+                                callback.errorInstall(installationStatus)
+                                break
+                            }
                         }
                     }
                 } catch (ignored: InterruptedException) {
@@ -239,4 +246,7 @@ object SplitAPKInstaller {
             }
         }.start()
     }
+    private const val InstallationStatus = "installationStatus"
+    private const val Waiting = "waiting"
+    private fun Context.getString() = getString(`in`.sunilpaulmathew.sCommon.R.string.installation_status_success)
 }
