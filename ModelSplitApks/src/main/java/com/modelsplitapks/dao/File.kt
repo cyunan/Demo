@@ -9,7 +9,7 @@ import net.lingala.zip4j.exception.ZipException
 /**
  *    author : ChenYuNan
  *    date   : 2022/6/29
- *    desc   :
+ *    desc   : io操作
  */
 fun delete(file: File): Boolean {
     if (file.isDirectory) {
