@@ -13,6 +13,9 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.bundletool.modelprotocol.getFileSize
+import com.bundletool.modelprotocol.parseDependencies
+import com.bundletool.modelprotocol.parseManifests
 import com.modelsplitapks.dao.SplitAPKInstaller.handleAppBundle
 import com.xiasuhuei321.loadingdialog.view.LoadingDialog
 
@@ -72,6 +75,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        val btTest = findViewById<Button>(R.id.bt_dpi)
+        btTest.setOnClickListener {
+            parseDependencies()
+//            println(getFileSize("/storage/emulated/0/aab/41750.aab"))
+//            parseBundleConfig()
+//            parseManifests()
+
+        }
+
 
 
     }
